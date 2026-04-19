@@ -112,27 +112,33 @@ flowchart TD
 
 ## 📸 Screenshots
 
-> *(Add your UI screenshots here)*
 
-🧭 Dashboard
-![Dashboard](assets/image-1.png)
+* 🧭 **Dashboard**
 Central hub to view jobs, track applications, and manage your job search workflow.
 
-🔍 Job Listings (Scraped Jobs)
-![Job Listings](assets/image-2.png)
+![Dashboard](assets/image-1.png)
+
+* 🔍 **Job Listings (Scraped Jobs)**
 Jobs automatically scraped from platforms like Naukri and Internshala with filtering capabilities.
 
-📌 Application Tracker
-![Application Tracker](assets/image-3.png)
+![Job Listings](assets/image-2.png)
+
+* 📌 **Application Tracker**
 Track job applications across different stages (Applied, Interview, Rejected) in one place.
 
-🤖 AI Resume Parsing Workflow (n8n)
-![Resume Parsing Workflow](assets/image-4.png)
+![Application Tracker](assets/image-3.png)
+
+* 🤖 **AI Resume Parsing Workflow (n8n)**
 Automated pipeline that extracts structured data (skills, experience) from resumes using LLMs and stores it for further processing.
 
-⚡ Job Embedding & Matching Pipeline (n8n)
-![Embedding Pipeline](assets/image-5.png)
+![Resume Parsing Workflow](assets/image-4.png)
+
+* ⚡ **Job Embedding & Matching Pipeline (n8n)**
 Jobs are processed and converted into vector embeddings, enabling semantic matching using cosine similarity with user profiles.
+
+![Embedding Pipeline](assets/image-5.png)
+
+
 ---
 
 ## 🚧 Status
@@ -172,19 +178,3 @@ Built as part of an AI-driven job automation project to demonstrate:
 ## ⭐️ Support
 
 If you find this useful, consider starring the repo!
-=======
-## Project Overview
-  - AI-powered job automation platform that scrapes jobs, stores them, matches resumes using embeddings, and notifies users.
-
-## Tech Stack
-- **n8n** (workflow automation)
-- **Apify** (job scraping)
-- **Supabase** (Postgres DB + Auth)
-- **Next.js** (Frontend)
-- **Node.js / Express** (API layer)
-- **OpenAI / Gemini** (AI matching)
-- **Docker** (deployment)
-
-## Architecture Flow
-= Apify → n8n → Supabase → Backend API → Frontend → AI Matching → Notifications
->>>>>>> 82a7eaef7142873d3582896e28ab5b0bc0b9c513
