@@ -172,3 +172,19 @@ Built as part of an AI-driven job automation project to demonstrate:
 ## ⭐️ Support
 
 If you find this useful, consider starring the repo!
+=======
+## Project Overview
+  - AI-powered job automation platform that scrapes jobs, stores them, matches resumes using embeddings, and notifies users.
+
+## Tech Stack
+- **n8n** (workflow automation)
+- **Apify** (job scraping)
+- **Supabase** (Postgres DB + Auth)
+- **Next.js** (Frontend)
+- **Node.js / Express** (API layer)
+- **OpenAI / Gemini** (AI matching)
+- **Docker** (deployment)
+
+## Architecture Flow
+= Apify → n8n → Supabase → Backend API → Frontend → AI Matching → Notifications
+>>>>>>> 82a7eaef7142873d3582896e28ab5b0bc0b9c513
