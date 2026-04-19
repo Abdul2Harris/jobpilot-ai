@@ -50,7 +50,9 @@ export const jobsService = {
     const totalJobs = data.length > 0 ? data[0].total_count : 0;
 
     // 2. Map the data to remove total_count from individual job objects if you want it "clean"
-    const cleanJobs = data.map(({ total_count, ...job }) => job);
+    const cleanJobs = (data as (Job & { total_count: number })[]).map(
+      ({ total_count, ...job }) => job,
+    );
 
     // 3. Apply filters client-side (since RPC doesn't support dynamic filters)
     let filtered = (cleanJobs as Job[]) ?? [];
