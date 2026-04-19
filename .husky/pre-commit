@@ -1,0 +1,19 @@
+#!/bin/sh
+
+echo "Running type checks before commit..."
+
+cd frontend && npx tsc --noEmit
+FRONTEND_EXIT=$?
+
+cd ../backend && npx tsc --noEmit
+BACKEND_EXIT=$?
+
+cd ..
+
+if [ $FRONTEND_EXIT -ne 0 ] || [ $BACKEND_EXIT -ne 0 ]; then
+  echo ""
+  echo "TypeScript errors found. Fix them before committing."
+  exit 1
+fi
+
+echo "Type checks passed."

@@ -1,0 +1,12 @@
+{
+  "name": "jobpilot-ai",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "prepare": "husky",
+    "typecheck": "npm --prefix frontend run typecheck && npm --prefix backend run typecheck"
+  },
+  "devDependencies": {
+    "husky": "^9.0.0"
+  }
+}

@@ -1,0 +1,90 @@
+/* ==========================================================
+    AI Job Automation — DESIGN SYSTEM GLOBALS
+   Art direction: The Digital Atelier → editorial SaaS
+   Palette: High-Contrast Neutral + Indigo-Violet primary
+   Typography: Inter — precision editorial
+   ========================================================== */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ——— Base Reset ——— */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100dvh;
+  line-height: 1.6;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  color: #191c1d;
+  background-color: #f8f9fa;
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+input, button, textarea, select { font: inherit; color: inherit; }
+
+/* Editorial tight headlines — DESIGN.md */
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+p, li { text-wrap: pretty; }
+button { cursor: pointer; background: none; border: none; }
+table  { border-collapse: collapse; width: 100%; }
+
+::selection {
+  background: rgba(70, 72, 212, 0.15);
+  color: #191c1d;
+}
+
+:focus-visible {
+  outline: 2px solid #4648d4;
+  outline-offset: 3px;
+  border-radius: 0.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+a, button, [role="button"], input, textarea, select {
+  transition:
+    color 180ms cubic-bezier(0.16, 1, 0.3, 1),
+    background 180ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 180ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 180ms cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0;
+  margin: -1px; overflow: hidden; clip: rect(0,0,0,0);
+  white-space: nowrap; border-width: 0;
+}
+
+/* ——— Ant Design: tighten label-to-input gap ——— */
+.ant-form-item .ant-form-item-label {
+  padding-bottom: 0.5px !important;
+}
