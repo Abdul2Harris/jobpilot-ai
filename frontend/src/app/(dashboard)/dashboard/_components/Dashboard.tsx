@@ -1,21 +1,12 @@
 "use client";
 
 import StatsCards from "@/components/dashboard/StatsCards";
-import SearchDrawer from "@/components/shared/SearchDrawer";
 import { Button } from "antd";
-import { Stats } from "fs";
-import {
-  Briefcase,
-  FileText,
-  User,
-  Bell,
-  Settings,
-  Search,
-} from "lucide-react";
-import { useState } from "react";
+import { Search } from "lucide-react";
+import useURLParams from "@/hooks/useURLParms";
 
 export default function DashboardPageNew() {
-  const[drawerOpen, setDrawerOpen] = useState(false);
+  const { setParam } = useURLParams();
 
   return (
     <div className="space-y-6">
@@ -34,12 +25,10 @@ export default function DashboardPageNew() {
           type="primary"
           icon={<Search size={16} />}
           className="!flex items-center gap-2 !px-5 !py-5 !rounded-md !font-semibold !text-white !bg-primary-gradient hover:!opacity-95 !shadow-ambient hover:!shadow-md!border-none"
-          onClick={() => setDrawerOpen(true)}
+          onClick={() => setParam("drawer", "open")}
         >
           Find Jobs
         </Button>
-
-        <SearchDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
       </div>
 
       {/* STATS */}

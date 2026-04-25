@@ -114,12 +114,6 @@ export default function ApplicationsPage() {
   const { data, isLoading } = useJobsApplications();
   const updateStatus = useUpdateJobStatus();
 
-  // const { mutate: updateStatus } = useMutation({
-  //   mutationFn: ({ id, status }: { id: string; status: string }) =>
-  //     axios.patch(`/api/v1/jobs/${id}/status`, { status }),
-  //   onSuccess: () => queryClient.invalidateQueries({ queryKey: ["applications"] }),
-  // });
-
   const handleUpdateStatus = (id: string, status: string) => {
     updateStatus.mutate(
       { id, status },

@@ -1,38 +1,29 @@
 "use client";
 
-import { useState } from "react";
-import { Drawer, Input, Checkbox, Select, Button, Form, notification } from "antd";
+import { Drawer, Input, Checkbox, Button, Form, notification } from "antd";
 import { MagnifyingGlass } from "@phosphor-icons/react";
-import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 import FormItem from "antd/es/form/FormItem";
 import { useJobsSearch } from "@/services/jobs";
 import useURLParams from "@/hooks/useURLParms";
 
-interface SearchDrawerProps {
-  open: boolean;
-  onClose: () => void;
-}
-
-export default function SearchDrawer({ open, onClose }: SearchDrawerProps) {
+export default function SearchDrawer() {
   const router = useRouter();
+  const { params, setParam, deleteParam } = useURLParams();
   const [form] = Form.useForm();
-
-
   const postJobSearch = useJobsSearch();
-//   const jobTitle = params.get("job_title") || "";
 
+  const open = params.get("drawer") === "open";
 
-  const handleSearch = (values: { job_title: string, sources: string[] }) => {
-    console.log('values:', values)
+  const handleClose = () => deleteParam("drawer");
+
+  const handleSearch = (values: { job_title: string; sources: string[] }) => {
     postJobSearch.mutate(values, {
       onSuccess: () => {
+        handleClose();
         router.push(`/jobs?job_title=${values.job_title}`);
       },
-      onError: (error:any) => {
-        console.log("error:", error);
-        // show error toast/message to user
+      onError: (error: any) => {
         notification.error({
           message: "Error",
           description: error.response?.data?.message,
@@ -45,7 +36,7 @@ export default function SearchDrawer({ open, onClose }: SearchDrawerProps) {
     <Drawer
       title="Find Matching Jobs"
       open={open}
-      onClose={onClose}
+      onClose={handleClose}
       width={420}
       footer={
         <Button
@@ -82,12 +73,6 @@ export default function SearchDrawer({ open, onClose }: SearchDrawerProps) {
             <Checkbox value="internshala">Internshala</Checkbox>
           </Checkbox.Group>
         </FormItem>
-
-        {/* <FormItem name="pages" label="Pages to Scrape" initialValue={1}>
-          <Select size="large" options={}>
-            
-          </Select>
-        </FormItem> */}
       </Form>
     </Drawer>
   );

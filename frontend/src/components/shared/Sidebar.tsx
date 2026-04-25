@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+import useURLParams from "@/hooks/useURLParms";
 
 const { Sider } = Layout;
 
@@ -38,6 +39,7 @@ const menuItems = [
 export default function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
+  const { setParam } = useURLParams();
 
   return (
     <Sider
@@ -77,7 +79,10 @@ export default function Sidebar() {
 
       {/* Bottom section */}
       <div className="mt-auto p-4">
-        <button className="w-full rounded-md bg-primary text-white py-2 text-sm font-semibold hover:bg-primary-container">
+        <button
+          onClick={() => setParam("drawer", "open")}
+          className="w-full rounded-md bg-primary text-white py-2 text-sm font-semibold hover:bg-primary-container"
+        >
           + New Job Scan
         </button>
 
