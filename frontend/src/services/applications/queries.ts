@@ -5,7 +5,6 @@ import type { IApplication } from "./contract";
 export const applicationQueries = createQueryKeys("applications", {
   list: {
     queryKey: null,
-    queryFn: (): Promise<IApplication[]> =>
-      GET({ url: "/applications" }),
+    queryFn: (): Promise<IApplication[]> => GET({ url: "/applications" }),
   },
 });

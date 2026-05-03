@@ -38,6 +38,7 @@ export const jobsService = {
     // 2. Call match_jobs RPC with embedding + pagination
     const { data, error } = await supabase.rpc("match_jobs", {
       query_embedding: profile.resume_embedding,
+      filter_user_id: userId,
       match_count: pagination.limit,
       match_offset: offset,
     });
@@ -106,7 +107,7 @@ export const jobsService = {
 
     let scrapedJobsRes;
     try {
-      console.log("API_BASE_URL:", API_BASE_URL);
+      // console.log("API_BASE_URL:", API_BASE_URL);
 
       scrapedJobsRes = await axios.post(`${API_BASE_URL}/scrape`, {
         keyword: scrapePayload.job_title,
@@ -118,41 +119,34 @@ export const jobsService = {
       throw new AppError(500, `Failed to scrape jobs: ${error.message}`);
     }
 
-    // console.log("scrapedJobsRes:", scrapedJobsRes.data.jobs);
-
     const jobs = scrapedJobsRes.data.jobs;
+    // console.log("jobs:",jobs);
 
     if (!jobs || jobs.length === 0) {
       throw new AppError(404, "No jobs found for this search.");
     }
 
-    // 2. Call n8n webhook to trigger Job parsing and embedding
+    // 2. Call n8n webhook and wait for job parsing + embedding to complete
+    let n8nResponse;
     try {
-      const response = await axios.post(
-        `${process.env.N8N_WEBHOOK_URL}/webhook-test/5f6d690a-7e85-4641-b57b-88b1444a1d1a`,
+      n8nResponse = await axios.post(
+        `${process.env.N8N_JOB_PARSER_URL}`,
         {
           jobs: jobs,
           auth_user_id: userId,
         },
       );
-      // console.log("n8n response:", response.data);
-      // 4. Return success
+      console.log("n8n response:", n8nResponse.data);
     } catch (n8nError: any) {
-      // Don't fail the whole request if n8n fails
-      // Profile is already created — n8n can be retried
-      console.error("n8n webhook failed:");
-      console.error("message:", n8nError.message);
-      console.error("code:", n8nError.code);
-
-      throw new AppError(500, `Job processing failed: ${n8nError.message}`);
+      console.error("n8n job parser failed:", n8nError.message);
+      throw new AppError(500, `Job processing failed: ${n8nError.response?.data ?? n8nError.message}`);
     }
 
-    // 3. Wait for n8n to finish embedding + storing
-    await new Promise((resolve) => setTimeout(resolve, 10000));
-
+    // 3. Return success only after n8n confirms all jobs are parsed + stored
     return {
       success: true,
       message: "Jobs scraped and processed successfully",
+      data: n8nResponse.data,
     };
   },
 
@@ -174,8 +168,11 @@ export const jobsService = {
   },
 
   // Get jobs grouped by status — useful for dashboard
-  async getJobStats(): Promise<Record<JobStatus, number>> {
-    const { data, error } = await supabase.from("jobs").select("status");
+  async getJobStats(authUserId: string): Promise<Record<JobStatus, number>> {
+    const { data, error } = await supabase
+      .from("jobs")
+      .select("status")
+      .eq("auth_user_id", authUserId);
 
     if (error) {
       throw new AppError(500, `Failed to fetch job stats: ${error.message}`);

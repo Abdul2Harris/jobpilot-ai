@@ -1,6 +1,15 @@
 "use client";
 
-import { Typography, Spin, Empty, Tag, Button, Select } from "antd";
+import {
+  Typography,
+  Spin,
+  Empty,
+  Tag,
+  Button,
+  Select,
+  notification,
+  App,
+} from "antd";
 import {
   PaperPlaneTilt,
   ChatCircleDots,
@@ -11,6 +20,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import type { IJob } from "@/services/jobs/contract";
 import { useJobsApplications, useUpdateJobStatus } from "@/services/jobs";
+import { queries } from "@/services/queryKey";
 
 const { Title, Text } = Typography;
 
@@ -114,12 +124,21 @@ export default function ApplicationsPage() {
   const { data, isLoading } = useJobsApplications();
   const updateStatus = useUpdateJobStatus();
 
+  const { notification } = App.useApp();
+
   const handleUpdateStatus = (id: string, status: string) => {
     updateStatus.mutate(
       { id, status },
       {
-        onSuccess: () =>
-          queryClient.invalidateQueries({ queryKey: ["applications"] }),
+        onSuccess: () => {
+          notification.success({
+            message: "Job status updated successfully",
+          });
+          
+          return queryClient.invalidateQueries({
+            queryKey: queries.applications.list.queryKey,
+          });
+        },
       },
     );
   };
@@ -128,7 +147,7 @@ export default function ApplicationsPage() {
 
   const grouped = STATUSES.reduce(
     (acc, s) => {
-      acc[s.key] = (jobs).filter((j) => j.status === s.key);
+      acc[s.key] = jobs.filter((j) => j.status === s.key);
       return acc;
     },
     {} as Record<string, IJob[]>,
@@ -137,7 +156,7 @@ export default function ApplicationsPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-on-surface">Appplications</h1>
+        <h1 className="text-2xl font-bold text-on-surface">Applications</h1>
         <p className="text-sm text-on-surface-variant">
           Track all your job applications in one place
         </p>

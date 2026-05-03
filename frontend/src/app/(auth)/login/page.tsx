@@ -1,13 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Form, Input, Card, Typography, Alert } from "antd";
-import { MailOutlined, LockOutlined } from "@ant-design/icons";
+import { Button, Form, Input, Card, Alert } from "antd";
+import { Mail, Lock } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-
-const { Title, Text } = Typography;
 
 interface LoginForm {
   email: string;
@@ -40,11 +38,18 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-      <Card className="max-w-md shadow-lg px-10">
+    <div className="min-h-screen flex items-center justify-center bg-surface">
+      <Card className="w-full max-w-md shadow-md px-10">
         <div className="text-center mb-8">
-          <Title level={2}>AI Job Tracker</Title>
-          <Text type="secondary">Sign in to your account</Text>
+          <h2
+            className="text-2xl font-bold text-on-surface mb-1"
+            style={{ letterSpacing: "-0.02em" }}
+          >
+            AI Job Tracker
+          </h2>
+          <p className="text-sm text-on-surface-variant">
+            Sign in to your account
+          </p>
         </div>
 
         {error && (
@@ -73,7 +78,11 @@ export default function LoginPage() {
               { type: "email", message: "Enter a valid email" },
             ]}
           >
-            <Input prefix={<MailOutlined />} placeholder="you@example.com" />
+            <Input
+              prefix={<Mail size={15} className="text-on-surface-faint" />}
+              placeholder="you@example.com"
+              className="!rounded-sm"
+            />
           </Form.Item>
           <Form.Item
             name="password"
@@ -81,8 +90,9 @@ export default function LoginPage() {
             rules={[{ required: true, message: "Password is required" }]}
           >
             <Input.Password
-              prefix={<LockOutlined />}
+              prefix={<Lock size={15} className="text-on-surface-faint" />}
               placeholder="Your password"
+              className="!rounded-sm"
             />
           </Form.Item>
           <Form.Item className="mb-0">
@@ -90,10 +100,14 @@ export default function LoginPage() {
               Sign In
             </Button>
           </Form.Item>
-          
+
           <div className="text-center mt-4">
-            <Text type="secondary">Don't have an account? </Text>
-            <Link href="/signup">Sign up</Link>
+            <span className="text-sm text-on-surface-variant">
+              Don&apos;t have an account?{" "}
+            </span>
+            <Link href="/signup" className="text-sm text-primary font-semibold">
+              Sign up
+            </Link>
           </div>
         </Form>
       </Card>

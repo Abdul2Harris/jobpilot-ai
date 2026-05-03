@@ -102,7 +102,7 @@ export default function OnboardingPage() {
   const [isDragging, setIsDragging] = useState(false);
   const [subStep, setSubStep] = useState<SubStep>("parse");
   const router = useRouter();
-  // const onboarding = useOnBoardUserFn();
+  const onboarding = useOnBoardUserFn();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   /* progress bar widths */
@@ -167,15 +167,15 @@ export default function OnboardingPage() {
       const email =
         localStorage.getItem("onboarding_email") || user.email || "";
 
-      // Step 5 — Call backend (handles profile creation + n8n)
-      // onboarding.mutateAsync({
-      //   resumeUrl: publicUrl,
-      //   name,
-      //   email,
-      //   authUserId: user.id,
-      // });
+      // Step 5 — Call backend and wait for n8n to finish parsing
+      await onboarding.mutateAsync({
+        resumeUrl: publicUrl,
+        name,
+        email,
+        authUserId: user.id,
+      });
 
-      // Step 6 — Cleanup + redirect
+      // Step 6 — Cleanup + redirect (only reached on success)
       localStorage.removeItem("onboarding_name");
       localStorage.removeItem("onboarding_email");
 
@@ -241,7 +241,7 @@ export default function OnboardingPage() {
             <span className="flex h-8 w-8 items-center justify-center rounded-md bg-primary">
               <Boxes className="h-4 w-4 text-surface" />
             </span>
-            Atelier AI
+            JobPilot AI
           </a>
 
           <div className="flex items-center gap-2">

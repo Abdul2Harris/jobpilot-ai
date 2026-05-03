@@ -23,15 +23,12 @@ export const useJobStats = () => {
 
 // Update job status — mutation automatically invalidates job list cache
 export const useUpdateJobStatus = () => {
-  //   const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: ({ id, status }: { id: string; status: string }) => {
-      console.log("id:", id);
-      console.log("status:", status);
+      // console.log("id:", id);
+      // console.log("status:", status);
       return PATCH({ url: `/jobs/${id}/status`, data: {status} })
     },
-
   });
 };
 

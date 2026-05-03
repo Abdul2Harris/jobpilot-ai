@@ -20,13 +20,17 @@ export default function SearchDrawer() {
   const handleSearch = (values: { job_title: string; sources: string[] }) => {
     postJobSearch.mutate(values, {
       onSuccess: () => {
+        notification.success({
+          message: "Jobs ready",
+          description: `Found matching jobs for "${values.job_title}"`,
+        });
         handleClose();
         router.push(`/jobs?job_title=${values.job_title}`);
       },
       onError: (error: any) => {
         notification.error({
-          message: "Error",
-          description: error.response?.data?.message,
+          message: "Job search failed",
+          description: error.response?.data?.message ?? "Something went wrong. Please try again.",
         });
       },
     });

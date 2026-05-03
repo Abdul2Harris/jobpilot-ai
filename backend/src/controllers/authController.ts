@@ -10,7 +10,7 @@ export const authController = {
   onboardUser: catchAsync(async (req: Request, res: Response) => {
     const user = res.locals["user"] as AuthUser;
 
-    console.log("userOnboardUser:", user);
+    // console.log("userOnboardUser:", user);
 
     const { resumeUrl, name, email, authUserId } = req.body;
     console.log("req.body:", req.body);
@@ -24,7 +24,7 @@ export const authController = {
 
     console.log("existingUser:", existingUser);
 
-    if (!existingUser) {
+    if (!existingUser.data) {
       // 2. Create or update profile row in Supabase
       const profile = await authService.createOrUpdateProfile({
         auth_user_id: authUserId,
@@ -35,12 +35,12 @@ export const authController = {
       console.log("profile:", profile);
     }
 
-    // 3. Call n8n webhook to trigger resume parsing
-    console.log("n8n Workflow started");
-    console.log("process.env.N8N_WEBHOOK_URL:", process.env.N8N_WEBHOOK_URL);
+    // 3. Call n8n webhook and wait for resume parsing to complete
+    console.log("n8n Workflow started on", process.env.N8N_RESUME_PARSER_URL);
+    let n8nResponse;
     try {
-      const response = await axios.post(
-        `${process.env.N8N_WEBHOOK_URL}/webhook/4b06475c-cd8a-4cba-9f7d-9f6d8f696e55`,
+      n8nResponse = await axios.post(
+        `${process.env.N8N_RESUME_PARSER_URL}`,
         {
           auth_user_id: authUserId,
           name: name ?? user.name,
@@ -48,25 +48,22 @@ export const authController = {
           resume_url: resumeUrl,
         },
       );
-      console.log("n8n response:", response.data);
-      // 4. Return success
+      console.log("n8n response:", n8nResponse.data);
     } catch (n8nError: any) {
-      // Don't fail the whole request if n8n fails
-      // Profile is already created — n8n can be retried
-      console.error("n8n webhook failed:");
-      console.error("message:", n8nError.message);
-      console.error("code:", n8nError.code);
+      console.error("n8n webhook failed:", n8nError.message);
+      res.status(502).json({
+        success: false,
+        message: "Resume parsing failed. Please try again.",
+        error: n8nError.response?.data ?? n8nError.message,
+      });
+      return;
     }
 
+    // 4. Return success only after n8n confirms
     res.status(201).json({
       success: true,
-      message: "Resume Parsedsuccessfully",
-      // profile: {
-      //   id: profile.id,
-      //   name: profile.name,
-      //   email: profile.email,
-      //   resume_url: profile.resume_url,
-      // },
+      message: "Resume parsed successfully",
+      data: n8nResponse.data,
     });
   }),
 

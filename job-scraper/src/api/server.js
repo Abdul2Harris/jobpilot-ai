@@ -23,30 +23,35 @@ app.post("/scrape", async (req, res) => {
 
   console.log(`🔍 Scraping "${keyword}" from: ${sources.join(", ")}`);
 
+  const SOURCE_LIMITS = { naukri: 20, internshala: 10 };
+
   try {
-    // Run all scrapers in parallel
+    // Run all scrapers in parallel, tracking which result belongs to which source
     const tasks = [];
-    if (sources.includes("naukri")) tasks.push(scrapeNaukri(keyword, pages));
-    if (sources.includes("internshala")) tasks.push(scrapeInternshala(keyword, pages));
-    // if (sources.includes("wellfound"))  tasks.push(scrapeWellfound(keyword, pages));
+    const activeSources = [];
+    if (sources.includes("naukri")) { tasks.push(scrapeNaukri(keyword, pages)); activeSources.push("naukri"); }
+    if (sources.includes("internshala")) { tasks.push(scrapeInternshala(keyword, pages)); activeSources.push("internshala"); }
+    // if (sources.includes("wellfound")) { tasks.push(scrapeWellfound(keyword, pages)); activeSources.push("wellfound"); }
 
     const results = await Promise.allSettled(tasks);
+    // console.log("results:", results);
 
-    const allJobs = results
-      .filter((r) => r.status === "fulfilled")
-      .flatMap((r) => r.value);
+    // Cap each source to its own limit before merging
+    const allJobs = results.flatMap((r, i) => {
+      if (r.status !== "fulfilled") return [];
+      const limit = SOURCE_LIMITS[activeSources[i]] ?? 10;
+      return r.value.slice(0, limit);
+    });
 
     // Deduplicate by URL
     const seen = new Set();
-    const uniqueJobs = allJobs.filter((job) => {
+    const jobsToSendn8n = allJobs.filter((job) => {
       if (seen.has(job.url)) return false;
       seen.add(job.url);
       return true;
     });
 
-    console.log(`✅ Total unique jobs: ${uniqueJobs.length}`);
-
-    const jobsToSendn8n = uniqueJobs.slice(0, 30);
+    console.log(`✅ Total unique jobs: ${jobsToSendn8n.length} (naukri ≤20, internshala ≤10)`);
 
     res.json({
       success: true,

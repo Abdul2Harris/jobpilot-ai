@@ -9,13 +9,13 @@ import type { AuthUser } from "../types/auth.types.js";
 export const jobsController = {
   // GET /api/v1/jobs
   getJobs: catchAsync(async (req: Request, res: Response) => {
-    console.log("req.query:", req.query);
+    // console.log("req.query:", req.query);
     const filters = parseJobFilters(req.query as Record<string, unknown>);
     // console.log("filters:", filters);
     const pagination = parsePaginationParams(
       req.query as Record<string, unknown>,
     );
-    console.log("pagination:", pagination);
+    // console.log("pagination:", pagination);
 
     const userId = res.locals["user"].id;
     // console.log('scrapePayload:', scrapePayload);
@@ -29,7 +29,9 @@ export const jobsController = {
 
   // GET /api/v1/jobs/stats
   getJobStats: catchAsync(async (_req: Request, res: Response) => {
-    const stats = await jobsService.getJobStats();
+    const authUserId = res.locals["user"].id;
+
+    const stats = await jobsService.getJobStats(authUserId);
 
     res.status(200).json({
       status: "success",
@@ -70,7 +72,7 @@ export const jobsController = {
       sources,
     };
 
-    console.log("scrapePayload:", scrapePayload);
+    // console.log("scrapePayload:", scrapePayload);
 
     const jobs = await jobsService.scrapeJobsAndN8nJobParsing(
       scrapePayload,
@@ -80,13 +82,14 @@ export const jobsController = {
     res.status(200).json({
       status: "success",
       message: "Jobs ready",
+      data: jobs,
     });
   }),
 
   // In jobsController
   getApplications: catchAsync(async (_req: Request, res: Response) => {
     const userId = res.locals["user"].id;
-    console.log("userId:", userId);
+    // console.log("userId:", userId);
     const data = await jobsService.getApplications(userId);
 
     res.status(200).json({ status: "success", data });
@@ -97,7 +100,7 @@ export const jobsController = {
     const { status } = req.body;
     const userId = res.locals["user"].id;
 
-    console.log("req.body:", req.body);
+    // console.log("req.body:", req.body);
     
     const validStatuses = [
       "not_applied",

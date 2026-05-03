@@ -15,12 +15,7 @@ import {
   Loader2,
   Calendar,
 } from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/Card"; // adjust to your actual path
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"; // adjust to your actual path
 import { useProfile } from "@/services/auth"; // adjust to your actual path
 
 const { TextArea } = Input;
@@ -115,6 +110,8 @@ export default function ProfilePage() {
       .toUpperCase();
   }
 
+  // console.log("profile Certs:", profile?.certifications.map((c:any) => c.name));
+
   /* ── loading ── */
   if (isLoading) {
     return (
@@ -142,7 +139,6 @@ export default function ProfilePage() {
       `}</style>
 
       <div className="flex flex-col gap-5">
-
         {/* ── Page heading ── */}
         <div className="ps" style={{ animationDelay: "0ms" }}>
           <h1 className="text-2xl font-bold tracking-tight text-on-surface leading-tight">
@@ -154,7 +150,10 @@ export default function ProfilePage() {
         </div>
 
         {/* ══════════ IDENTITY CARD ══════════ */}
-        <Card className="ps" style={{ animationDelay: "60ms" } as React.CSSProperties}>
+        <Card
+          className="ps"
+          style={{ animationDelay: "60ms" } as React.CSSProperties}
+        >
           <CardContent>
             <div className="flex items-start gap-6">
               {/* Avatar */}
@@ -232,17 +231,25 @@ export default function ProfilePage() {
                   <div className="flex items-center gap-2 mt-4 flex-wrap">
                     {profile.experience_summary.total_experience_years > 0 && (
                       <span className="text-xs px-2.5 py-1 rounded-sm bg-surface-low text-on-surface-faint border border-outline-variant/20">
-                        {profile.experience_summary.total_experience_years}y total
+                        {profile.experience_summary.total_experience_years}y
+                        total
                       </span>
                     )}
-                    {profile.experience_summary.fulltime_experience_years > 0 && (
+                    {profile.experience_summary.fulltime_experience_years >
+                      0 && (
                       <span className="text-xs px-2.5 py-1 rounded-sm bg-surface-low text-on-surface-faint border border-outline-variant/20">
-                        {profile.experience_summary.fulltime_experience_years}y full-time
+                        {profile.experience_summary.fulltime_experience_years}y
+                        full-time
                       </span>
                     )}
-                    {profile.experience_summary.internship_experience_months > 0 && (
+                    {profile.experience_summary.internship_experience_months >
+                      0 && (
                       <span className="text-xs px-2.5 py-1 rounded-sm bg-surface-low text-on-surface-faint border border-outline-variant/20">
-                        {profile.experience_summary.internship_experience_months}mo internships
+                        {
+                          profile.experience_summary
+                            .internship_experience_months
+                        }
+                        mo internships
                       </span>
                     )}
                   </div>
@@ -267,9 +274,15 @@ export default function ProfilePage() {
         </Card> */}
 
         {/* ══════════ EXPERTISE & SKILLS ══════════ */}
-        <Card className="ps" style={{ animationDelay: "140ms" } as React.CSSProperties}>
+        <Card
+          className="ps"
+          style={{ animationDelay: "140ms" } as React.CSSProperties}
+        >
           <CardContent>
-            <SectionHeader icon={<Zap size={15} />} title="Expertise & Skills" />
+            <SectionHeader
+              icon={<Zap size={15} />}
+              title="Expertise & Skills"
+            />
 
             {/* skill chips using AntD Tag */}
             {skills.length > 0 && (
@@ -311,7 +324,10 @@ export default function ProfilePage() {
 
         {/* ══════════ EXPERIENCE ══════════ */}
         {profile.experience && profile.experience.length > 0 && (
-          <Card className="ps" style={{ animationDelay: "180ms" } as React.CSSProperties}>
+          <Card
+            className="ps"
+            style={{ animationDelay: "180ms" } as React.CSSProperties}
+          >
             <CardContent>
               <SectionHeader
                 icon={<Briefcase size={15} />}
@@ -330,7 +346,10 @@ export default function ProfilePage() {
 
               <div className="flex flex-col">
                 {profile.experience.map((exp, i) => (
-                  <div key={i} className="exp-item flex gap-4 py-5 first:pt-0 last:pb-0">
+                  <div
+                    key={i}
+                    className="exp-item flex gap-4 py-5 first:pt-0 last:pb-0"
+                  >
                     {/* company icon */}
                     <div className="w-10 h-10 rounded-md bg-surface-low border border-outline-variant/20 flex items-center justify-center shrink-0 mt-0.5">
                       <Building2 size={16} className="text-on-surface-faint" />
@@ -398,9 +417,15 @@ export default function ProfilePage() {
 
         {/* ══════════ PROJECTS ══════════ */}
         {profile.projects && profile.projects.length > 0 && (
-          <Card className="ps" style={{ animationDelay: "220ms" } as React.CSSProperties}>
+          <Card
+            className="ps"
+            style={{ animationDelay: "220ms" } as React.CSSProperties}
+          >
             <CardContent>
-              <SectionHeader icon={<FolderKanban size={15} />} title="Projects" />
+              <SectionHeader
+                icon={<FolderKanban size={15} />}
+                title="Projects"
+              />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {profile.projects.map((project, i) => (
                   <div
@@ -419,18 +444,19 @@ export default function ProfilePage() {
                     <p className="text-xs text-on-surface-variant leading-relaxed">
                       {project.description}
                     </p>
-                    {project.technologies && project.technologies.length > 0 && (
-                      <div className="flex flex-wrap gap-1.5 mt-1">
-                        {project.technologies.map((tech) => (
-                          <span
-                            key={tech}
-                            className="text-[11px] px-2 py-0.5 rounded-sm bg-surface-highest text-on-surface-faint font-medium"
-                          >
-                            {tech}
-                          </span>
-                        ))}
-                      </div>
-                    )}
+                    {project.technologies &&
+                      project.technologies.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5 mt-1">
+                          {project.technologies.map((tech) => (
+                            <span
+                              key={tech}
+                              className="text-[11px] px-2 py-0.5 rounded-sm bg-surface-highest text-on-surface-faint font-medium"
+                            >
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+                      )}
                     <span className="text-[11px] font-bold text-primary uppercase tracking-[0.07em] flex items-center gap-1 mt-auto pt-2 group-hover:gap-2 transition-all">
                       View Project
                       <ExternalLink size={10} />
@@ -451,7 +477,10 @@ export default function ProfilePage() {
           {profile.education && profile.education.length > 0 && (
             <Card>
               <CardContent>
-                <SectionHeader icon={<GraduationCap size={15} />} title="Education" />
+                <SectionHeader
+                  icon={<GraduationCap size={15} />}
+                  title="Education"
+                />
                 <div className="flex flex-col gap-5">
                   {profile.education.map((edu, i) => (
                     <div key={i} className="flex flex-col gap-0.5">
@@ -474,7 +503,10 @@ export default function ProfilePage() {
           {/* Preferences */}
           <Card>
             <CardContent>
-              <SectionHeader icon={<SlidersHorizontal size={15} />} title="Preferences" />
+              <SectionHeader
+                icon={<SlidersHorizontal size={15} />}
+                title="Preferences"
+              />
               <div className="flex flex-col gap-4">
                 {/* Desired role */}
                 <div className="flex flex-col gap-1.5">
@@ -487,9 +519,18 @@ export default function ProfilePage() {
                     placeholder="Select a role..."
                     className="w-full"
                     options={[
-                      { value: "Senior Product Designer", label: "Senior Product Designer" },
-                      { value: "Senior Frontend Engineer", label: "Senior Frontend Engineer" },
-                      { value: "Full Stack Engineer", label: "Full Stack Engineer" },
+                      {
+                        value: "Senior Product Designer",
+                        label: "Senior Product Designer",
+                      },
+                      {
+                        value: "Senior Frontend Engineer",
+                        label: "Senior Frontend Engineer",
+                      },
+                      {
+                        value: "Full Stack Engineer",
+                        label: "Full Stack Engineer",
+                      },
                       { value: "UX Researcher", label: "UX Researcher" },
                       { value: "Product Manager", label: "Product Manager" },
                       { value: "Other", label: "Other" },
@@ -526,18 +567,30 @@ export default function ProfilePage() {
 
         {/* ══════════ CERTIFICATIONS ══════════ */}
         {profile.certifications && profile.certifications.length > 0 && (
-          <Card className="ps" style={{ animationDelay: "300ms" } as React.CSSProperties}>
+          <Card
+            className="ps"
+            style={{ animationDelay: "300ms" } as React.CSSProperties}
+          >
             <CardContent>
               <SectionHeader icon={<Zap size={15} />} title="Certifications" />
-              <div className="flex flex-wrap gap-2">
-                {profile.certifications.map((cert, i) => (
-                  <Tag
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {profile.certifications.map((cert: any, i: number) => (
+                  <div
                     key={i}
-                    className="text-xs font-medium rounded-sm px-2.5 py-1 bg-surface-low text-on-surface-variant border-outline-variant/20"
-                    style={{ borderRadius: 6 }}
+                    className="flex flex-col gap-1 p-4 rounded-md bg-surface-low border border-outline-variant/20"
                   >
-                    {cert}
-                  </Tag>
+                    <span className="text-sm font-semibold text-on-surface tracking-tight">
+                      {cert.name}
+                    </span>
+                    <span className="text-xs text-primary font-medium">
+                      {cert.issuer}
+                    </span>
+                    {cert.year && (
+                      <span className="text-xs text-on-surface-faint mt-0.5">
+                        {cert.year}
+                      </span>
+                    )}
+                  </div>
                 ))}
               </div>
             </CardContent>
@@ -575,7 +628,6 @@ export default function ProfilePage() {
             {saved ? "Saved!" : "Save Changes"}
           </Button>
         </div>
-
       </div>
     </>
   );

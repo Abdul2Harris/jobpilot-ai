@@ -1,13 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Form, Input, Button, Alert, Typography, Card } from "antd";
-import { UserOutlined, MailOutlined, LockOutlined } from "@ant-design/icons";
+import { Form, Input, Button, Alert, Card } from "antd";
+import { User, Mail, Lock } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-
-const { Title, Text } = Typography;
 
 export default function SignupPage() {
   const [loading, setLoading] = useState(false);
@@ -44,49 +42,20 @@ export default function SignupPage() {
   };
 
   return (
-    <div
-      className="min-h-screen flex flex-col"
-      style={{
-        background:
-          "linear-gradient(135deg, #eef0fb 0%, #f4f0ff 50%, #eef0fb 100%)",
-      }}
-    >
+    <div className="min-h-screen flex flex-col bg-surface">
       {/* Main content — centered */}
       <div className="flex-1 flex flex-col items-center justify-center px-4 py-12">
-        {/* App icon + branding above card */}
-        {/* <div className="flex flex-col items-center mb-6">
-          <div
-            className="w-14 h-14 rounded-2xl flex items-center justify-center mb-3"
-            style={{ background: "linear-gradient(135deg, #4648d4, #6063ee)" }}
-          >
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M12 2L9.5 9.5H2L7.5 13.5L5.5 21L12 16.5L18.5 21L16.5 13.5L22 9.5H14.5L12 2Z"
-                fill="white"
-                opacity="0.9"
-              />
-            </svg>
-          </div>
-          <h1
-            className="text-xl font-bold text-[#191c1d] mt-4"
-            style={{ letterSpacing: "-0.02em" }}
-          >
-            AI Job Automation
-          </h1>
-          <p className="text-sm text-[#464554] mt-1">Craft your vision with precision</p>
-        </div> */}
-
         {/* Card */}
         <Card className="w-full max-w-[420px] !p-8">
           {/* Card header */}
           <div className="mb-6">
             <h2
-              className="text-2xl font-bold text-[#191c1d] mb-1"
+              className="text-2xl font-bold text-on-surface mb-1"
               style={{ letterSpacing: "-0.02em" }}
             >
               Create your account
             </h2>
-            <p className="text-sm text-[#464554]">
+            <p className="text-sm text-on-surface-variant">
               Join the next generation of creative studios
             </p>
           </div>
@@ -115,7 +84,11 @@ export default function SignupPage() {
               rules={[{ required: true, message: "Name is required" }]}
               className="!mb-4"
             >
-              <Input placeholder="Evelyn Thorne" style={{ borderRadius: 8 }} />
+              <Input
+                prefix={<User size={15} className="text-on-surface-faint" />}
+                placeholder="Evelyn Thorne"
+                className="!rounded-sm"
+              />
             </Form.Item>
 
             <Form.Item
@@ -128,8 +101,9 @@ export default function SignupPage() {
               className="!mb-4"
             >
               <Input
+                prefix={<Mail size={15} className="text-on-surface-faint" />}
                 placeholder="evelyn@atelier.ai"
-                style={{ borderRadius: 8 }}
+                className="!rounded-sm"
               />
             </Form.Item>
 
@@ -143,18 +117,15 @@ export default function SignupPage() {
               className="!mb-6"
             >
               <Input.Password
+                prefix={<Lock size={15} className="text-on-surface-faint" />}
                 placeholder="••••••••"
-                style={{ borderRadius: 8 }}
+                className="!rounded-sm"
               />
             </Form.Item>
 
             <Form.Item
               name="confirm_password"
               label="CONFIRM PASSWORD"
-              // rules={[
-              //   { required: true, message: "Password is required" },
-              //   { min: 6, message: "Min 6 characters" },
-              // ]}
               rules={[
                 {
                   required: true,
@@ -172,8 +143,9 @@ export default function SignupPage() {
               className="!mb-6"
             >
               <Input.Password
+                prefix={<Lock size={15} className="text-on-surface-faint" />}
                 placeholder="••••••••"
-                style={{ borderRadius: 8 }}
+                className="!rounded-sm"
               />
             </Form.Item>
 
@@ -184,7 +156,6 @@ export default function SignupPage() {
                 htmlType="submit"
                 loading={loading}
                 block
-                // style={{ borderRadius: 8, height: 48, fontWeight: 600, fontSize: 15 }}
               >
                 Create Account →
               </Button>
@@ -192,31 +163,25 @@ export default function SignupPage() {
 
             {/* Divider */}
             <div className="flex items-center gap-3 my-5">
-              <div className="flex-1 h-px bg-[#e1e3e4]" />
-              <span className="text-xs font-medium tracking-widest text-[#9a9ba8]">
+              <div className="flex-1 h-px bg-surface-highest" />
+              <span className="text-xs font-medium tracking-widest text-on-surface-faint">
                 OR CONTINUE WITH
               </span>
-              <div className="flex-1 h-px bg-[#e1e3e4]" />
+              <div className="flex-1 h-px bg-surface-highest" />
             </div>
 
             {/* Google button */}
             <Form.Item className="!mb-5">
               <Button
                 block
+                className="!rounded-sm !h-11 !border-outline-variant !bg-surface-lowest !text-on-surface !font-medium"
                 style={{
-                  borderRadius: 8,
-                  height: 44,
-                  borderColor: "rgba(199,196,215,0.3)",
-                  background: "#fff",
-                  fontWeight: 500,
-                  color: "#191c1d",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   gap: 8,
                 }}
               >
-                {/* Google SVG logo */}
                 <svg width="18" height="18" viewBox="0 0 24 24">
                   <path
                     fill="#4285F4"
@@ -241,12 +206,12 @@ export default function SignupPage() {
 
             {/* Sign in link */}
             <div className="text-center">
-              <Text type="secondary" style={{ fontSize: 13 }}>
+              <span className="text-sm text-on-surface-variant">
                 Already have an account?{" "}
-              </Text>
+              </span>
               <Link
                 href="/login"
-                style={{ color: "#4648d4", fontWeight: 600, fontSize: 13 }}
+                className="text-sm text-primary font-semibold"
               >
                 Sign in
               </Link>
@@ -258,27 +223,27 @@ export default function SignupPage() {
       {/* Footer */}
       <footer className="flex items-center justify-between px-8 py-5">
         <div className="flex items-center gap-2">
-          <span className="text-sm font-bold text-[#191c1d]">Atelier AI</span>
-          <span className="text-sm text-[#9a9ba8]">
+          <span className="text-sm font-bold text-on-surface">Atelier AI</span>
+          <span className="text-sm text-on-surface-faint">
             © 2024 Atelier AI. All rights reserved.
           </span>
         </div>
         <div className="flex items-center gap-6">
           <Link
             href="/privacy"
-            className="text-sm text-[#464554] hover:text-[#191c1d]"
+            className="text-sm text-on-surface-variant hover:text-on-surface transition-colors"
           >
             Privacy Policy
           </Link>
           <Link
             href="/terms"
-            className="text-sm text-[#464554] hover:text-[#191c1d]"
+            className="text-sm text-on-surface-variant hover:text-on-surface transition-colors"
           >
             Terms of Service
           </Link>
           <Link
             href="/security"
-            className="text-sm text-[#464554] hover:text-[#191c1d]"
+            className="text-sm text-on-surface-variant hover:text-on-surface transition-colors"
           >
             Security
           </Link>
