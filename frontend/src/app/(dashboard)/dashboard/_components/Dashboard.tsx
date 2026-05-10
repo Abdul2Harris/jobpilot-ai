@@ -1,12 +1,22 @@
 "use client";
 
 import StatsCards from "@/components/dashboard/StatsCards";
-import { Button } from "antd";
+import JobDrawer from "@/components/jobs/JobDrawer";
+import { useJobs } from "@/services/jobs";
+import type { IJob } from "@/services/jobs/contract";
+import { Button, Spin } from "antd";
 import { Search } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import useURLParams from "@/hooks/useURLParms";
 
 export default function DashboardPageNew() {
   const { setParam } = useURLParams();
+  const router = useRouter();
+  const [selectedJob, setSelectedJob] = useState<IJob | null>(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const { data: topJobsData, isLoading: topJobsLoading } = useJobs({ limit: 3, page: 1 });
 
   return (
     <div className="space-y-6">
@@ -68,44 +78,46 @@ export default function DashboardPageNew() {
             <h3 className="text-lg font-semibold text-on-surface">
               AI Recommended Jobs
             </h3>
-            <button className="text-sm text-primary">View all matches</button>
+            <button
+              onClick={() => router.push("/jobs")}
+              className="text-sm text-primary hover:underline"
+            >
+              View all matches
+            </button>
           </div>
 
-          <div className="space-y-4">
-            {[
-              {
-                title: "IT Analyst",
-                company: "McLaren Strategic Solutions (MSS) • Hyderabad",
-                match: "68%",
-              },
-              {
-                title: "Software Developer",
-                company: "Digiswitch Infotech Private Limited • Noida",
-                match: "61%",
-              },
-              {
-                title: "Software Engineer",
-                company: "Randstad Digital • Hyderabad",
-                match: "59%",
-              },
-            ].map((job, i) => (
-              <div
-                key={i}
-                className="flex items-center justify-between p-4 rounded-md hover:bg-surface-low transition"
-              >
-                <div>
-                  <p className="font-medium text-on-surface">{job.title}</p>
-                  <p className="text-xs text-on-surface-variant">
-                    {job.company}
-                  </p>
-                </div>
-
-                <span className="text-xs px-3 py-1 rounded-full bg-primary/10 text-primary font-medium">
-                  {job.match} Match
-                </span>
-              </div>
-            ))}
-          </div>
+          {topJobsLoading ? (
+            <div className="flex justify-center py-8">
+              <Spin size="small" />
+            </div>
+          ) : !topJobsData?.data?.length ? (
+            <p className="text-sm text-on-surface-variant text-center py-8">
+              No jobs yet. Use Find Jobs to scan for matches.
+            </p>
+          ) : (
+            <div className="space-y-2">
+              {topJobsData.data.map((job) => {
+                const match = Math.round(job.similarity * 100);
+                return (
+                  <button
+                    key={job.id}
+                    onClick={() => { setSelectedJob(job); setDrawerOpen(true); }}
+                    className="w-full flex items-center justify-between p-4 rounded-md hover:bg-surface-low transition text-left"
+                  >
+                    <div>
+                      <p className="font-medium text-on-surface">{job.title}</p>
+                      <p className="text-xs text-on-surface-variant">
+                        {job.company}{job.location ? ` • ${job.location}` : ""}
+                      </p>
+                    </div>
+                    <span className="text-xs px-3 py-1 rounded-full bg-primary/10 text-primary font-medium shrink-0 ml-4">
+                      {match}% Match
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         {/* RIGHT */}
@@ -158,6 +170,12 @@ export default function DashboardPageNew() {
           </div>
         </div>
       </div>
+
+      <JobDrawer
+        job={selectedJob}
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+      />
     </div>
   );
 }

@@ -2,29 +2,36 @@
 
 import { useHandleApply } from "@/hooks/useHandleApply";
 import { IJob } from "@/services/jobs/contract";
-import { Drawer, Button, notification } from "antd";
-import { Check } from "lucide-react";
+import { Drawer, Button, notification, Progress } from "antd";
+import { Check, CheckCircle, XCircle } from "lucide-react";
 import { useState } from "react";
+import { useProfile } from "@/services/auth";
 
 export default function JobDrawer({
   job,
   open,
   onClose,
 }: {
-  job: IJob;
+  job: IJob | null;
   open: boolean;
   onClose: () => void;
 }) {
-  if (!job) return null;
-
-  const match = Math.round(job.similarity * 100);
-  const [applied, setApplied] = useState(job.status === "applied");
+  const [applied, setApplied] = useState(job?.status === "applied");
+  const { data: profile } = useProfile();
 
   const handleApply = useHandleApply({
-    jobId: job.id,
+    jobId: job?.id ?? "",
     setApplied,
     status: "applied",
   });
+
+  if (!job) return null;
+
+  const match = Math.round(job.similarity * 100);
+  const userSkills = (profile?.skills ?? []).map((s) => s.toLowerCase());
+  const jobSkills = job.skills ?? [];
+  const matchedSkills = jobSkills.filter((s) => userSkills.includes(s.toLowerCase()));
+  const gapSkills = jobSkills.filter((s) => !userSkills.includes(s.toLowerCase()));
 
   const handleApplyClick = (jobUrl: string, jobId: string) => {
     window.open(jobUrl, "_blank");
@@ -61,9 +68,19 @@ export default function JobDrawer({
           <h2 className="text-lg font-semibold text-on-surface">{job.title}</h2>
           <p className="text-sm text-on-surface-variant">{job.company}</p>
 
-          <span className="inline-block mt-2 text-xs px-2 py-1 rounded bg-primary/10 text-primary">
-            {match}% Match
-          </span>
+          <div className="mt-3">
+            <div className="flex items-center justify-between mb-1">
+              <span className="text-xs font-medium text-on-surface-variant">Match Score</span>
+              <span className="text-xs font-bold text-primary">{match}%</span>
+            </div>
+            <Progress
+              percent={match}
+              showInfo={false}
+              strokeColor={match >= 70 ? "#22c55e" : match >= 50 ? "#f59e0b" : "#ef4444"}
+              trailColor="#e5e7eb"
+              size="small"
+            />
+          </div>
         </div>
 
         {/* META */}
@@ -74,22 +91,54 @@ export default function JobDrawer({
           <p>🌐 {job.source}</p>
         </div>
 
-        {/* SKILLS */}
-        {job.skills?.length > 0 && (
-          <div className="mb-4">
-            <h3 className="text-sm font-semibold text-on-surface mb-2">
-              Skills
+        {/* WHY THIS MATCHES */}
+        {jobSkills.length > 0 && (
+          <div className="mb-4 rounded-lg border border-outline-variant/30 bg-surface-low p-4">
+            <h3 className="text-sm font-semibold text-on-surface mb-3">
+              Why This Matches
             </h3>
-            <div className="flex flex-wrap gap-2">
-              {job.skills.map((skill: string) => (
-                <span
-                  key={skill}
-                  className="text-xs px-2 py-1 rounded bg-surface-low text-on-surface"
-                >
-                  {skill}
-                </span>
-              ))}
-            </div>
+
+            {matchedSkills.length > 0 && (
+              <div className="mb-3">
+                <div className="flex items-center gap-1 mb-2">
+                  <CheckCircle size={13} className="text-green-500" />
+                  <span className="text-xs font-medium text-green-600">
+                    You have ({matchedSkills.length})
+                  </span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {matchedSkills.map((skill) => (
+                    <span
+                      key={skill}
+                      className="text-xs px-2 py-1 rounded-full bg-green-50 text-green-700 border border-green-200"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {gapSkills.length > 0 && (
+              <div>
+                <div className="flex items-center gap-1 mb-2">
+                  <XCircle size={13} className="text-red-400" />
+                  <span className="text-xs font-medium text-red-500">
+                    Skills gap ({gapSkills.length})
+                  </span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {gapSkills.map((skill) => (
+                    <span
+                      key={skill}
+                      className="text-xs px-2 py-1 rounded-full bg-red-50 text-red-600 border border-red-200"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
 
