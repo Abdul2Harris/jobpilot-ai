@@ -5,6 +5,8 @@ import Navbar from "@/components/shared/Navbar";
 import SearchDrawer from "@/components/shared/SearchDrawer";
 import { Suspense } from "react";
 
+export const dynamic = "force-dynamic";
+
 export default function DashboardLayout({
   children,
 }: {
@@ -12,7 +14,9 @@ export default function DashboardLayout({
 }) {
   return (
     <Layout className="min-h-screen">
-      <Sidebar />
+      <Suspense>
+        <Sidebar />
+      </Suspense>
       <Layout>
         <Navbar />
         <Layout.Content className="p-6 overflow-auto">
