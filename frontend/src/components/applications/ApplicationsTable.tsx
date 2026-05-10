@@ -93,11 +93,11 @@ export default function ApplicationsTable({
       key: "actions",
       render: (_, record) => (
         <Space>
-          {record.job?.job_url && (
+          {record.job?.url && (
             <Button
               icon={<LinkOutlined />}
               size="small"
-              href={record.job.job_url}
+              href={record.job.url}
               target="_blank"
             >
               View Job
