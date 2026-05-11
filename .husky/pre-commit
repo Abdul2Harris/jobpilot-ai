@@ -1,14 +1,14 @@
 #!/bin/sh
 
+REPO_ROOT=$(pwd)
+
 echo "Running type checks before commit..."
 
-cd frontend && npx tsc --noEmit
+cd "$REPO_ROOT/frontend" && npx tsc --noEmit
 FRONTEND_EXIT=$?
 
-cd ../backend && npx tsc --noEmit
+cd "$REPO_ROOT/backend" && npx tsc --noEmit
 BACKEND_EXIT=$?
-
-cd ..
 
 if [ $FRONTEND_EXIT -ne 0 ] || [ $BACKEND_EXIT -ne 0 ]; then
   echo ""
@@ -17,3 +17,15 @@ if [ $FRONTEND_EXIT -ne 0 ] || [ $BACKEND_EXIT -ne 0 ]; then
 fi
 
 echo "Type checks passed."
+echo "Running ESLint on staged frontend files..."
+
+cd "$REPO_ROOT/frontend" && npx lint-staged
+LINT_EXIT=$?
+
+if [ $LINT_EXIT -ne 0 ]; then
+  echo ""
+  echo "ESLint errors found. Fix them before committing."
+  exit 1
+fi
+
+echo "All checks passed."
