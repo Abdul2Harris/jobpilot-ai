@@ -1,28 +1,40 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 REPO_ROOT=$(git rev-parse --show-toplevel)
 
-echo "Running type checks..."
-cd "$REPO_ROOT/frontend" && npm run typecheck
-FRONTEND_TS_EXIT=$?
+echo "Running pre-commit checks..."
 
-cd "$REPO_ROOT/backend" && npx tsc --noEmit
-BACKEND_TS_EXIT=$?
+# Type check frontend
+cd "$REPO_ROOT/frontend" && npm run typecheck ||
+(
+  echo "TypeScript check failed on frontend.
+        Fix the type errors above and try committing again."
+  false
+)
 
-if [ $FRONTEND_TS_EXIT -ne 0 ] || [ $BACKEND_TS_EXIT -ne 0 ]; then
-  echo ""
-  echo "TypeScript errors found. Fix them before committing."
-  exit 1
-fi
+# Type check backend
+cd "$REPO_ROOT/backend" && npx tsc --noEmit ||
+(
+  echo "TypeScript check failed on backend.
+        Fix the type errors above and try committing again."
+  false
+)
 
-echo "Running ESLint on all frontend files..."
-cd "$REPO_ROOT/frontend" && npm run lint
-LINT_EXIT=$?
+# Lint frontend
+cd "$REPO_ROOT/frontend" && npm run lint ||
+(
+  echo "ESLint check failed.
+        Fix the lint errors above and try committing again."
+  false
+)
 
-if [ $LINT_EXIT -ne 0 ]; then
-  echo ""
-  echo "ESLint errors found. Fix them before committing."
-  exit 1
-fi
+# Build frontend (catches errors that tsc/eslint miss)
+echo "Building frontend to catch any build errors..."
+cd "$REPO_ROOT/frontend" && npm run build ||
+(
+  echo "Next.js build failed.
+        Fix the build errors above and try committing again."
+  false
+)
 
-echo "All checks passed."
+echo "All checks passed. Committing now."
