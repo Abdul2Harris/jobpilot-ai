@@ -2,24 +2,21 @@
 
 REPO_ROOT=$(git rev-parse --show-toplevel)
 
-echo "Running type checks before commit..."
-
-cd "$REPO_ROOT/frontend" && npx tsc --noEmit
-FRONTEND_EXIT=$?
+echo "Running type checks..."
+cd "$REPO_ROOT/frontend" && npm run typecheck
+FRONTEND_TS_EXIT=$?
 
 cd "$REPO_ROOT/backend" && npx tsc --noEmit
-BACKEND_EXIT=$?
+BACKEND_TS_EXIT=$?
 
-if [ $FRONTEND_EXIT -ne 0 ] || [ $BACKEND_EXIT -ne 0 ]; then
+if [ $FRONTEND_TS_EXIT -ne 0 ] || [ $BACKEND_TS_EXIT -ne 0 ]; then
   echo ""
   echo "TypeScript errors found. Fix them before committing."
   exit 1
 fi
 
-echo "Type checks passed."
-echo "Running ESLint on staged frontend files..."
-
-cd "$REPO_ROOT/frontend" && npx lint-staged
+echo "Running ESLint on all frontend files..."
+cd "$REPO_ROOT/frontend" && npm run lint
 LINT_EXIT=$?
 
 if [ $LINT_EXIT -ne 0 ]; then
