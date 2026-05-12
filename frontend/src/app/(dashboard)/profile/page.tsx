@@ -3,7 +3,6 @@
 import { useState, KeyboardEvent } from "react";
 import { Input, Button, Select, Switch, Tag } from "antd";
 import {
-  FileText,
   Zap,
   Briefcase,
   FolderKanban,
@@ -15,10 +14,9 @@ import {
   Loader2,
   Calendar,
 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"; // adjust to your actual path
+import { Card, CardContent } from "@/components/ui/Card"; // adjust to your actual path
 import { useProfile } from "@/services/auth"; // adjust to your actual path
 
-const { TextArea } = Input;
 
 /* ─── Section header inside a card ─── */
 function SectionHeader({
@@ -51,7 +49,6 @@ export default function ProfilePage() {
   const { data: profile, isLoading } = useProfile();
 
   /* local editable state */
-  const [summary, setSummary] = useState("");
   const [skills, setSkills] = useState<string[]>([]);
   const [skillInput, setSkillInput] = useState("");
   const [desiredRole, setDesiredRole] = useState<string | undefined>(undefined);
@@ -63,7 +60,7 @@ export default function ProfilePage() {
   /* seed once from backend */
   const [seeded, setSeeded] = useState(false);
   if (profile && !seeded) {
-    setSummary(profile.summary ?? "");
+    // setSummary(profile.summary ?? "");
     setSkills(profile.skills ?? []);
     setSeeded(true);
   }

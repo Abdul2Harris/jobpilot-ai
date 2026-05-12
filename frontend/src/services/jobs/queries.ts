@@ -1,6 +1,6 @@
 import { createQueryKeys } from "@lukemorales/query-key-factory";
 import { GET } from "@/lib/client";
-import type { IJobFilters, IPaginatedJobsResponse, IJob, IJobStats, IAppliedJobsResponse, IJobStatsResponse } from "./contract";
+import type { IJobFilters, IPaginatedJobsResponse, IJob, IAppliedJobsResponse, IJobStatsResponse } from "./contract";
 
 export const jobQueries = createQueryKeys("jobs", {
   list: (filters: IJobFilters) => ({

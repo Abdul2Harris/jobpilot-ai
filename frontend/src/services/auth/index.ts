@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { PATCH, POST } from "@/lib/client";
-import type { IAuthUser, ICreateProfile, IUpdateProfile } from "./contract";
+import type { ICreateProfile, IUpdateProfile } from "./contract";
 import { authQueries } from "./queries";
 import { notification } from "antd";
 
@@ -24,11 +24,11 @@ export const useUpdateProfile = () => {
 };
 
 export const useOnBoardUserFn = () => {
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (input: ICreateProfile) => {
-      console.log("Onboarding Input Data:", input); // Log the input here
+      // console.log("Onboarding Input Data:", input); // Log the input here
       return POST({ url: "/auth/onboard", data: input });
     },
 

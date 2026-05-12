@@ -1,6 +1,5 @@
 import { useUpdateJobStatus } from "@/services/jobs";
 import { useQueryClient } from "@tanstack/react-query";
-import { stat } from "fs";
 import { App } from "antd";
 
 export const useHandleApply = ({
@@ -19,8 +18,6 @@ export const useHandleApply = ({
 
   // ✅ Return a function instead of running logic directly
   return () => {
-    console.log("jobId:", jobId);
-
     updateStatus.mutate(
       { id: jobId, status: status ?? "applied" },
       {
@@ -31,7 +28,6 @@ export const useHandleApply = ({
       },
     );
 
-    console.log("Status Updated: ");
     setApplied(true);
   };
 };

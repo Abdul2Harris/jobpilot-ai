@@ -3,7 +3,6 @@
 import { useCallback, useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 import { useOnBoardUserFn } from "@/services/auth";
 import { cn } from "@/lib/utils";
 import {
@@ -22,7 +21,7 @@ import {
 type OnboardingStep = "upload" | "processing" | "done";
 
 /* ─────────────────────────── types ─────────────────────────── */
-type Step = "upload" | "processing" | "done";
+// type Step = "upload" | "processing" | "done";
 type SubStep = "parse" | "extract" | "embed";
 
 /* ─────────────────────────── helpers ───────────────────────── */
@@ -100,7 +99,7 @@ export default function OnboardingPage() {
   const [error, setError] = useState<string | null>(null);
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [subStep, setSubStep] = useState<SubStep>("parse");
+  const [subStep] = useState<SubStep>("parse");
   const router = useRouter();
   const onboarding = useOnBoardUserFn();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -117,7 +116,7 @@ export default function OnboardingPage() {
       : step === "processing"
         ? "active"
         : "completed";
-  const s3 = step === "done" ? "done-final" : "upcoming";
+  // const s3 = step === "done" ? "done-final" : "upcoming";
 
   const handleUpload = async () => {
     if (!resumeFile) {
@@ -160,7 +159,6 @@ export default function OnboardingPage() {
       const {
         data: { publicUrl },
       } = supabase.storage.from("resumes").getPublicUrl(filePath);
-      console.log("publicUrl:", publicUrl);
 
       // Step 4 — Get name + email from localStorage
       const name = localStorage.getItem("onboarding_name") || "";

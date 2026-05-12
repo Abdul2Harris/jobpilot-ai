@@ -1,5 +1,5 @@
 import { createQueryKeys } from "@lukemorales/query-key-factory";
-import { IAuthUser, IProfile } from "./contract";
+import { IProfile } from "./contract";
 import { GET } from "@/lib/client";
 
 export const authQueries = createQueryKeys("auth", {

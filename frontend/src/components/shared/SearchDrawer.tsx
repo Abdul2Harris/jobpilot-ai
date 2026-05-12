@@ -9,7 +9,7 @@ import useURLParams from "@/hooks/useURLParms";
 
 export default function SearchDrawer() {
   const router = useRouter();
-  const { params, setParam, deleteParam } = useURLParams();
+  const { params, deleteParam } = useURLParams();
   const [form] = Form.useForm();
   const postJobSearch = useJobsSearch();
 

@@ -1,7 +1,7 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { jobQueries } from "./queries";
 import { PATCH, POST } from "@/lib/client";
-import type { IJobFilters, IUpdateJobStatus } from "./contract";
+import type { IJobFilters } from "./contract";
 
 // Get paginated jobs with filters
 export const useJobs = (filters: IJobFilters = {}) => {
@@ -35,7 +35,6 @@ export const useUpdateJobStatus = () => {
 export const useJobsSearch = () => {
   return useMutation({
     mutationFn: (input: {job_title: string, sources: string[]}) => {
-      console.log("input:",input);
       return POST({ url: `/jobs/search`, data: input })
     }
   })

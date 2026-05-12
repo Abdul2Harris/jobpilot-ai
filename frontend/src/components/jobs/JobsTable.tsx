@@ -1,16 +1,11 @@
 "use client";
 
-import { Table, Button, Dropdown, Space, Typography, Progress } from "antd";
-import {
-  LinkOutlined,
-  MoreOutlined,
-} from "@ant-design/icons";
+import { Table, Typography, Progress } from "antd";
+
+
 import type { ColumnsType } from "antd/es/table";
-import type { IJob, JobStatus } from "@/services/jobs/contract";
+import type { IJob } from "@/services/jobs/contract";
 import type { IPaginatedMeta } from "@/services/jobs/contract";
-import { useUpdateJobStatus } from "@/services/jobs";
-import JobStatusBadge from "./JobStatusBadge";
-import type { MenuProps } from "antd";
 
 interface JobsTableProps {
   data: IJob[];
@@ -19,13 +14,13 @@ interface JobsTableProps {
   onPageChange: (page: number, pageSize: number) => void;
 }
 
-const statusActions: { key: JobStatus; label: string }[] = [
-  { key: "not_applied", label: "Mark Not Applied" },
-  { key: "applied", label: "Mark Applied" },
-  { key: "interviewing", label: "Mark Interviewing" },
-  { key: "rejected", label: "Mark Rejected" },
-  { key: "offered", label: "Mark Offered" },
-];
+// const statusActions: { key: JobStatus; label: string }[] = [
+//   { key: "not_applied", label: "Mark Not Applied" },
+//   { key: "applied", label: "Mark Applied" },
+//   { key: "interviewing", label: "Mark Interviewing" },
+//   { key: "rejected", label: "Mark Rejected" },
+//   { key: "offered", label: "Mark Offered" },
+// ];
 
 export default function JobsTable({
   data,
@@ -33,7 +28,7 @@ export default function JobsTable({
   loading,
   onPageChange,
 }: JobsTableProps) {
-  const { mutate: updateStatus, isPending } = useUpdateJobStatus();
+  // const { mutate: updateStatus, isPending } = useUpdateJobStatus();
 
   const columns: ColumnsType<IJob> = [
     {

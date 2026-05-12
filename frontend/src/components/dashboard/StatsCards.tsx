@@ -1,13 +1,8 @@
 "use client";
 
-import { Card, Col, Row, Statistic, Spin } from "antd";
-import {
-  FileSearchOutlined,
-  FileDoneOutlined,
-  CloseCircleOutlined,
-  TrophyOutlined,
-  SyncOutlined,
-} from "@ant-design/icons";
+import { Spin } from "antd";
+
+
 import { useJobStats } from "@/services/jobs";
 import { FileCheck, FileSearch, RefreshCw, Trophy, XCircle } from "lucide-react";
 
@@ -16,13 +11,13 @@ import { FileCheck, FileSearch, RefreshCw, Trophy, XCircle } from "lucide-react"
 export default function StatsCards() {
   const { data: stats, isLoading } = useJobStats();
 
-  const dummyData = [
-    { title: "NOT APPLIED", value: "24", sub: "+3 new" },
-    { title: "APPLIED", value: "118", sub: "84% fit" },
-    { title: "INTERVIEWING", value: "12", sub: "3 today" },
-    { title: "REJECTED", value: "45", sub: "Market avg" },
-    { title: "OFFERED", value: "2", sub: "Success" },
-  ];
+  // const dummyData = [
+  //   { title: "NOT APPLIED", value: "24", sub: "+3 new" },
+  //   { title: "APPLIED", value: "118", sub: "84% fit" },
+  //   { title: "INTERVIEWING", value: "12", sub: "3 today" },
+  //   { title: "REJECTED", value: "45", sub: "Market avg" },
+  //   { title: "OFFERED", value: "2", sub: "Success" },
+  // ];
 
   const statConfig = [
   {
@@ -88,7 +83,7 @@ export default function StatsCards() {
 
     <div className="grid grid-cols-5 gap-4">
       {statConfig.map((stat) => (
-        <div className="bg-surface-lowest border border-outline-variant/30 rounded-lg p-5 shadow-sm hover:shadow-md transition-all duration-300">
+        <div key={stat.key} className="bg-surface-lowest border border-outline-variant/30 rounded-lg p-5 shadow-sm hover:shadow-md transition-all duration-300">
           <div className="flex justify-between">
           <p className="text-md font-medium text-on-surface-faint mb-2">{stat.label.toLocaleUpperCase()}</p>
           <div className="flex items-center gap-2 mb-2">{stat.icon}</div>

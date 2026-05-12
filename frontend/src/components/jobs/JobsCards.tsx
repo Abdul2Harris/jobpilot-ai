@@ -27,7 +27,7 @@ export default function JobCard({
     status: "applied",
   });
 
-  const handleApplyClick = (jobUrl: string, jobId: string) => {
+  const handleApplyClick = (jobUrl: string) => {
     window.open(jobUrl, "_blank");
 
     notification.info({
@@ -98,7 +98,7 @@ export default function JobCard({
           type="primary"
           onClick={(e) => {
             e.stopPropagation();
-            handleApplyClick(job.url || "", job.id);
+            handleApplyClick(job.url || "");
           }}
           className=""
         >

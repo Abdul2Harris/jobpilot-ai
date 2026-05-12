@@ -3,9 +3,6 @@ import { App, Layout } from "antd";
 import Sidebar from "@/components/shared/Sidebar";
 import Navbar from "@/components/shared/Navbar";
 import SearchDrawer from "@/components/shared/SearchDrawer";
-import { Suspense } from "react";
-
-export const dynamic = "force-dynamic";
 
 export default function DashboardLayout({
   children,
@@ -14,9 +11,7 @@ export default function DashboardLayout({
 }) {
   return (
     <Layout className="min-h-screen">
-      <Suspense>
-        <Sidebar />
-      </Suspense>
+      <Sidebar />
       <Layout>
         <Navbar />
         <Layout.Content className="p-6 overflow-auto">
@@ -25,9 +20,7 @@ export default function DashboardLayout({
           </App>
         </Layout.Content>
       </Layout>
-      <Suspense>
-        <SearchDrawer />
-      </Suspense>
+      <SearchDrawer />
     </Layout>
   );
 }

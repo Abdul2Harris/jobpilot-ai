@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Typography, Empty, Spin } from "antd";
+import { Empty, Spin } from "antd";
 import JobFilters from "@/components/jobs/JobFilters";
 import { useJobs } from "@/services/jobs";
 import type { IJobFilters, JobSource, JobStatus } from "@/services/jobs/contract";
@@ -10,7 +10,6 @@ import JobCard from "@/components/jobs/JobsCards";
 import JobDrawer from "@/components/jobs/JobDrawer";
 import JobsPagination from "@/components/jobs/JobsPagination";
 
-const { Title, Text } = Typography;
 
 export default function JobsPage() {
 

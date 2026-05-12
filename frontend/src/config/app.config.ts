@@ -7,7 +7,7 @@ export const QUERY_CONFIG: QueryClientConfig = {
     queries: {
       refetchOnWindowFocus: false,
       staleTime: 1 * 60 * 1000, // 1 Minute
-      retry: (failureCount, error: any) => {
+      retry: (error: any) => {
         const statusCode = error?.response?.status;
 
         if (statusCode === 401) return false;

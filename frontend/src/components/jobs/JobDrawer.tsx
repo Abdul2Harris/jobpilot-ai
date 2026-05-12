@@ -33,7 +33,7 @@ export default function JobDrawer({
   const matchedSkills = jobSkills.filter((s) => userSkills.includes(s.toLowerCase()));
   const gapSkills = jobSkills.filter((s) => !userSkills.includes(s.toLowerCase()));
 
-  const handleApplyClick = (jobUrl: string, jobId: string) => {
+  const handleApplyClick = (jobUrl: string) => {
     window.open(jobUrl, "_blank");
 
     notification.info({
@@ -161,7 +161,7 @@ export default function JobDrawer({
             type="primary"
             onClick={(e) => {
               e.stopPropagation();
-              handleApplyClick(job.url || "", job.id);
+              handleApplyClick(job.url || "");
             }}
             className="w-full"
           >

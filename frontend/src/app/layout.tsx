@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import AntdProvider from "@/providers/AntdProvider";
 import { ReactQueryProvider } from "@/providers/ReactQueryProvider";
 import { Inter } from "next/font/google";
+import { Suspense } from "react";
 import "./globals.css"
 
 
@@ -26,7 +27,9 @@ export default function RootLayout({
     <html lang="en" className={inter.variable}>
       <body>
         <AntdProvider>
-          <ReactQueryProvider>{children}</ReactQueryProvider>
+          <ReactQueryProvider>
+            <Suspense>{children}</Suspense>
+          </ReactQueryProvider>
         </AntdProvider>
       </body>
     </html>
