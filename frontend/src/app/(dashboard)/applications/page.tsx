@@ -15,13 +15,12 @@ import {
   Trophy,
   XCircle,
 } from "@phosphor-icons/react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
+import { useQueryClient } from "@tanstack/react-query";
 import type { IJob } from "@/services/jobs/contract";
 import { useJobsApplications, useUpdateJobStatus } from "@/services/jobs";
 import { queries } from "@/services/queryKey";
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 const STATUSES = [
   {
