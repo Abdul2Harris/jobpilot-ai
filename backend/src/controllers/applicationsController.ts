@@ -54,7 +54,7 @@ export const applicationsController = {
       return;
     }
 
-    await applicationsService.deleteApplication(user.id, id);
+    await applicationsService.deleteApplication(user.id, String(id));
 
     res.status(200).json({
       status: "success",

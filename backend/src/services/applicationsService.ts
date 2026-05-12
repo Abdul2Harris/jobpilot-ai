@@ -44,7 +44,7 @@ export const applicationsService = {
     }
 
     // Automatically mark job as applied
-    await jobsService.updateJobStatus(input.job_id, { status: "applied" });
+    await jobsService.updateJobStatus(input.job_id, "applied");
 
     return data as Application;
   },
@@ -72,8 +72,6 @@ export const applicationsService = {
     }
 
     // Revert job status
-    await jobsService.updateJobStatus(application.job_id, {
-      status: "not_applied",
-    });
+    await jobsService.updateJobStatus(application.job_id, "not_applied");
   },
 };

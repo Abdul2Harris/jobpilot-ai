@@ -214,7 +214,7 @@ export const jobsService = {
     return (data as Job[]) ?? [];
   },
 
-  async updateJobStatus(userId: string, jobId: string, status: JobStatus) {
+  async updateJobStatus(jobId: string, status: JobStatus) {
     const { data, error } = await supabase
       .from("jobs")
       .update({ status: status })

@@ -114,7 +114,7 @@ export const jobsController = {
       return;
     }
 
-    const data = await jobsService.updateJobStatus(userId, String(id), status);
+    const data = await jobsService.updateJobStatus(String(id), status);
 
     res.status(200).json({ status: "success", data });
   }),
